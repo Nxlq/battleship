@@ -13,7 +13,7 @@ const Ship = function (length) {
 
   function checkIfSunk() {
     const remainingShipHp = length - hitCount;
-    return remainingShipHp === 0;
+    return remainingShipHp <= 0;
   }
   return {
     length,
