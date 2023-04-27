@@ -33,3 +33,10 @@ test("gameboard should be able to place ships at specific coordinates VERTICALLY
 
   expect(gameboard.getBoard()).toEqual(mockBoard);
 });
+
+test("setShip method should not allow for ships to be placed at coordinates where the ship wont fit within the gameboard", () => {
+  const gameboard = GameboardFactory();
+  expect(gameboard.setShip([0, 8], "carrier")).toBe(
+    console.error("invalid placement position")
+  );
+});

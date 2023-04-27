@@ -18,9 +18,13 @@ const GameboardFactory = () => {
   }
 
   const setShip = (coord, ship, direction = "h") => {
-    console.log(ship);
-    console.log("f", ships[ship]);
-    for (let i = 0; i < ships[ship].length; i += 1) {
+    // check if coordinates are valid, throw error if not
+    if (!checkIfValidCoords(coord, ship, direction))
+      return console.error("invalid placement position");
+
+    const shipLength = ships[ship].length;
+
+    for (let i = 0; i < shipLength; i += 1) {
       const coordsToSet =
         direction === "h" ? [coord[0], coord[1] + i] : [coord[0] + i, coord[1]];
 
@@ -36,6 +40,25 @@ const GameboardFactory = () => {
   const logShips = () => {
     console.log(ships);
   };
+
+  function checkIfValidCoords(coord, ship, direction) {
+    const shipLength = ships[ship].length;
+    const coordsToCheck =
+      direction === "h"
+        ? [coord[0], coord[1] + shipLength]
+        : [coord[0] + shipLength, coord[1]];
+
+    // if the final ship coordinates are within the gameboard range return true
+    if (
+      coordsToCheck[0] >= 0 &&
+      coordsToCheck[0] <= 9 &&
+      coordsToCheck[1] >= 0 &&
+      coordsToCheck[1] <= 9
+    ) {
+      return true;
+    }
+    return false;
+  }
 
   return { getBoard, setShip, logShips };
 };
