@@ -1,4 +1,4 @@
-const Ship = function (length) {
+const Ship = (length) => {
   const isSunk = false;
   let hitCount = 0;
 
