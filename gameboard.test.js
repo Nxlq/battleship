@@ -58,3 +58,8 @@ test("gameboard's receiveAttack method should record the coordinates into a miss
     [1, 2],
   ]);
 });
+
+test("gameboard should be able to report if all of its ships have been sunk", () => {
+  const gameboard = GameboardFactory();
+  expect(gameboard.hasShipsAlive).toBe(false);
+});
