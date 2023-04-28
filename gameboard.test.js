@@ -54,8 +54,8 @@ test("gameboard's receiveAttack method should record the coordinates into a miss
   gameboard.receiveAttack([3, 4]);
   gameboard.receiveAttack([1, 2]);
   expect(gameboard.missedAttacks).toEqual([
-    [3, 4],
-    [1, 2],
+    [3, 4].toString(),
+    [1, 2].toString(),
   ]);
 });
 

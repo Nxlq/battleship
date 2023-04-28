@@ -70,7 +70,7 @@ const GameboardFactory = () => {
   const receiveAttack = (coord) => {
     const target = coord.toString();
     if (board.get(target) !== "water") return ships[board.get(target)].hit(); // if target is a ship, call targetted ships hit method and return
-    return missedAttacks.push(coord); // if the target is water
+    return missedAttacks.push(coord.toString()); // if the target is water
   };
 
   const hasShipsAlive = () => {
