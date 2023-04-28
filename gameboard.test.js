@@ -40,3 +40,21 @@ test("setShip method should not allow for ships to be placed at coordinates wher
     console.error("invalid placement position")
   );
 });
+
+test("gameboard's receiveAttack method should increase a ship's hitcount if the coords given to it land on a ship", () => {
+  const gameboard = GameboardFactory();
+  gameboard.setShip([0, 0], "carrier");
+  gameboard.receiveAttack([0, 0]);
+  gameboard.receiveAttack([0, 1]);
+  expect(gameboard.getShipHitcount("carrier")).toBe(2);
+});
+
+test("gameboard's receiveAttack method should record the coordinates into a missed shots array if the shot landed on a water coordinate", () => {
+  const gameboard = GameboardFactory();
+  gameboard.receiveAttack([3, 4]);
+  gameboard.receiveAttack([1, 2]);
+  expect(gameboard.missedAttacks).toEqual([
+    [3, 4],
+    [1, 2],
+  ]);
+});
