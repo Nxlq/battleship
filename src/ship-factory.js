@@ -4,6 +4,7 @@ const Ship = (length) => {
 
   function hit() {
     hitCount += 1;
+    return hitCount;
   }
 
   function getHitCount() {
