@@ -73,6 +73,12 @@ const GameboardFactory = () => {
     return missedAttacks.push(coord); // if the target is water
   };
 
+  const hasShipsAlive = () => {
+    const shipsValues = Object.values(ships);
+    const aliveShips = shipsValues.filter((ship) => !ship.checkIfSunk());
+    return aliveShips.length !== 0;
+  };
+
   return {
     getBoard,
     setShip,
@@ -80,6 +86,7 @@ const GameboardFactory = () => {
     receiveAttack,
     getShipHitcount,
     missedAttacks,
+    hasShipsAlive,
   };
 };
 

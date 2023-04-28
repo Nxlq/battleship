@@ -61,5 +61,31 @@ test("gameboard's receiveAttack method should record the coordinates into a miss
 
 test("gameboard should be able to report if all of its ships have been sunk", () => {
   const gameboard = GameboardFactory();
-  expect(gameboard.hasShipsAlive).toBe(false);
+  gameboard.setShip([0, 0], "carrier");
+  gameboard.receiveAttack([0, 0]);
+  gameboard.receiveAttack([0, 1]);
+  gameboard.receiveAttack([0, 2]);
+  gameboard.receiveAttack([0, 3]);
+  gameboard.receiveAttack([0, 4]);
+
+  gameboard.setShip([1, 0], "battleship");
+  gameboard.receiveAttack([1, 0]);
+  gameboard.receiveAttack([1, 1]);
+  gameboard.receiveAttack([1, 2]);
+  gameboard.receiveAttack([1, 3]);
+
+  gameboard.setShip([2, 0], "cruiser");
+  gameboard.receiveAttack([2, 0]);
+  gameboard.receiveAttack([2, 1]);
+  gameboard.receiveAttack([2, 2]);
+
+  gameboard.setShip([3, 0], "submarine");
+  gameboard.receiveAttack([3, 0]);
+  gameboard.receiveAttack([3, 1]);
+  gameboard.receiveAttack([3, 2]);
+
+  gameboard.setShip([4, 0], "destroyer");
+  gameboard.receiveAttack([4, 0]);
+  gameboard.receiveAttack([4, 1]);
+  expect(gameboard.hasShipsAlive()).toBe(false);
 });
