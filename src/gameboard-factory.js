@@ -90,8 +90,4 @@ const GameboardFactory = () => {
   };
 };
 
-// GameboardFactory().getBoard();
-GameboardFactory().logShips();
-// GameboardFactory().setShip([2, 3], "carrier");
-
 export default GameboardFactory;
