@@ -1,4 +1,6 @@
-function assignGameBoardCoords() {
+const btnStartGame = document.getElementById("btn-start-game");
+
+function generateGameBoardCoords() {
   const gameBoards = document.querySelectorAll(".game-board");
 
   gameBoards.forEach((gameBoard) => {
@@ -17,4 +19,4 @@ function assignGameBoardCoords() {
   });
 }
 
-export default assignGameBoardCoords;
+export { generateGameBoardCoords, btnStartGame };

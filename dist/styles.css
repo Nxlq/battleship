@@ -33,3 +33,18 @@ main {
   color: white;
   font-size: 2rem;
 }
+
+#btn-start-game {
+  margin-top: 40px;
+  height: 4rem;
+  width: 12rem;
+  border: solid 3px green;
+  /* background-color: greenyellow; */
+  border-radius: 10px;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+#btn-start-game:hover {
+  background-color: greenyellow;
+}
