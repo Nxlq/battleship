@@ -18,6 +18,11 @@ function generateGameBoardCoords() {
   });
 }
 
+// function renderWater(el) {
+//   el.style.backgroundColor = "blue";
+// }
+
+// !~ The functionality of this function should be split into specific event listeners for each board, should be refactored if desired cleaner code ~!
 function addBoardCoordEventListeners(
   playerOneRecieveAttack,
   playerTwoRecieveAttack,
@@ -33,11 +38,13 @@ function addBoardCoordEventListeners(
 
         if (e.target.parentElement.classList.contains("one")) {
           // if the attack is invalid then the receive attack function will return false and the turns should not be toggled
-          // only if the attack is valid then toggle turns
-          if (!playerOneRecieveAttack(targettedCoords)) return;
+          // only if the attack is valid then toggle turns and continue game flow
+          const result = playerOneRecieveAttack(targettedCoords);
+          if (!result) return;
           playerTwoToggleTurn();
         } else {
-          if (!playerTwoRecieveAttack(targettedCoords)) return;
+          const result = playerTwoRecieveAttack(targettedCoords);
+          if (!result) return;
           playerOneToggleTurn();
         }
       })
