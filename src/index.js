@@ -4,6 +4,7 @@ import {
   generateGameBoardCoords,
   btnStartGame,
   addBoardCoordEventListeners,
+  renderPlayerShips,
 } from "./game-view";
 
 const playerOne = newPlayer();
@@ -30,6 +31,8 @@ window.addEventListener("DOMContentLoaded", () => {
   playerTwo.gameboard.setShip([2, 2], "cruiser");
   playerTwo.gameboard.setShip([3, 2], "submarine");
   playerTwo.gameboard.setShip([4, 2], "destroyer");
+
+  renderPlayerShips(playerOne.gameboard.getBoard());
 });
 
 btnStartGame.addEventListener("click", () => {
