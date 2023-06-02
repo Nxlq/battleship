@@ -27,6 +27,12 @@ function renderShip(targettedSquare) {
   targettedSquare.style.backgroundColor = "#9c0000";
 }
 
+function renderX(targettedSquare) {
+  const peg = document.createElement("div");
+  peg.classList.add("marked");
+  targettedSquare.appendChild(peg);
+}
+
 export function renderPlayerShips(gameboardData) {
   const p1Grid = [...playerOneBoard.children];
   p1Grid.forEach((square) => {
@@ -48,6 +54,7 @@ export function addBoardCoordEventListeners(
     const grid = [...gameBoard.children];
     grid.forEach((gridSquare) =>
       gridSquare.addEventListener("click", (e) => {
+        if (!e.target.classList.contains("coord-square")) return;
         const targettedCoords = e.target.attributes.coords.value;
         console.log(targettedCoords);
 
@@ -56,8 +63,7 @@ export function addBoardCoordEventListeners(
           // only if the attack is valid then toggle turns and continue game flow
           const result = playerOneRecieveAttack(targettedCoords);
           if (!result) return;
-          if (result === "water") renderWater(e.target);
-          if (result !== "water") renderShip(e.target);
+          renderX(e.target);
           playerTwoToggleTurn();
         } else {
           const result = playerTwoRecieveAttack(targettedCoords);

@@ -2,6 +2,8 @@ import Ship from "./ship-factory";
 
 const GameboardFactory = () => {
   let canBoardBeAttacked = false;
+  const hitAttacks = [];
+  const missedAttacks = [];
 
   function toggleBoardState() {
     canBoardBeAttacked = canBoardBeAttacked !== true;
@@ -19,8 +21,6 @@ const GameboardFactory = () => {
     submarine: Ship(3),
     destroyer: Ship(2),
   };
-
-  const missedAttacks = [];
 
   const board = new Map([]);
 
@@ -94,10 +94,13 @@ const GameboardFactory = () => {
       return false;
     }
     const target = coord.toString();
+    if (hitAttacks.includes(target)) return false;
+    if (missedAttacks.includes(target)) return false;
 
     // if target is a ship, call targetted ships hit method and return
     if (board.get(target) !== "water") {
       ships[board.get(target)].hit();
+      hitAttacks.push(target);
       toggleBoardState();
       return board.get(target);
     }
