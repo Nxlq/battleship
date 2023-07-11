@@ -1,6 +1,11 @@
 export const btnStartGame = document.getElementById("btn-start-game");
-const gameBoards = document.querySelectorAll(".game-board");
+export const gameBoards = document.querySelectorAll(".game-board");
 const playerOneBoard = document.querySelector(".game-board.one");
+const playerTwoBoard = document.querySelector(".game-board.two");
+const gameContainerOne = document.querySelector(".game-container.one");
+const gameContainerTwo = document.querySelector(".game-container.two");
+
+const body = document.querySelector("body");
 
 export function generateGameBoardCoords() {
   gameBoards.forEach((gameBoard) => {
@@ -19,6 +24,16 @@ export function generateGameBoardCoords() {
   });
 }
 
+export function renderPlayerOneAttackable() {
+  gameContainerOne.style.backgroundColor = "#9c0000";
+  gameContainerTwo.style.backgroundColor = "black";
+}
+
+export function renderPlayerTwoAttackable() {
+  gameContainerTwo.style.backgroundColor = "#9c0000";
+  gameContainerOne.style.backgroundColor = "black";
+}
+
 function renderWater(targettedSquare) {
   targettedSquare.style.backgroundColor = "#34b1eb";
 }
@@ -31,6 +46,10 @@ function renderX(targettedSquare) {
   const peg = document.createElement("div");
   peg.classList.add("marked");
   targettedSquare.appendChild(peg);
+}
+
+function renderEndScreen() {
+  body.style.backgroundColor = "red";
 }
 
 export function renderPlayerShips(gameboardData) {
@@ -63,6 +82,7 @@ export function addBoardCoordEventListeners(
           // only if the attack is valid then toggle turns and continue game flow
           const result = playerOneRecieveAttack(targettedCoords);
           if (!result) return;
+          if (result === "game over") renderEndScreen();
           renderX(e.target);
           playerTwoToggleTurn();
         } else {
@@ -70,6 +90,7 @@ export function addBoardCoordEventListeners(
           if (!result) return;
           if (result === "water") renderWater(e.target);
           if (result !== "water") renderShip(e.target);
+          if (result === "game over") renderEndScreen();
           playerOneToggleTurn();
         }
       })

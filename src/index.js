@@ -5,10 +5,19 @@ import {
   btnStartGame,
   addBoardCoordEventListeners,
   renderPlayerShips,
+  renderPlayerOneAttackable,
+  renderPlayerTwoAttackable,
+  gameBoards,
 } from "./game-view";
 
 const playerOne = newPlayer();
 const playerTwo = newComputer();
+
+function renderActiveTurn() {
+  if (playerOne.gameboard.isBoardActive()) return renderPlayerOneAttackable();
+  if (playerTwo.gameboard.isBoardActive()) return renderPlayerTwoAttackable();
+  return "error neither board is active?";
+}
 
 window.addEventListener("DOMContentLoaded", () => {
   generateGameBoardCoords();
@@ -33,11 +42,15 @@ window.addEventListener("DOMContentLoaded", () => {
   playerTwo.gameboard.setShip([4, 2], "destroyer");
 
   renderPlayerShips(playerOne.gameboard.getBoard());
+  renderActiveTurn();
 });
 
 btnStartGame.addEventListener("click", () => {
   playerOne.gameboard.getBoard();
   playerTwo.gameboard.getBoard();
-
   // console.log(playerOne.gameboard.receiveAttack([2, 2]));
+});
+
+gameBoards.forEach((board) => {
+  board.addEventListener("click", renderActiveTurn);
 });
