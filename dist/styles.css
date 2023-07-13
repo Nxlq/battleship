@@ -127,3 +127,7 @@ h3 {
   width: 50px;
   border: solid 1px black;
 }
+
+.game-board.one > div.coord-square {
+  background-color: #34b1eb;
+}
