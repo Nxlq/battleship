@@ -17,6 +17,10 @@ main {
   gap: 30px;
 }
 
+h3 {
+  color: white;
+}
+
 .game-board {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
@@ -58,4 +62,68 @@ main {
   background-color: #ffffff;
   border-radius: 50%;
   display: inline-block;
+}
+
+#piece-selection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: solid 1px lightyellow;
+  margin-bottom: 40px;
+}
+
+#pieces {
+  height: 150px;
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  /* align-items: center; */
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 45% 55%;
+}
+
+.header-text {
+  color: white;
+}
+
+.carrier {
+  height: 50px;
+  width: 250px;
+  display: flex;
+  grid-area: 2 / 1 / 3 / 2;
+}
+
+.battleship {
+  height: 50px;
+  width: 200px;
+  display: flex;
+  grid-area: 2 / 2 / 3 / 3;
+}
+
+.cruiser {
+  height: 50px;
+  width: 150px;
+  display: flex;
+  grid-area: 2 / 3 / 3 / 4;
+}
+.submarine {
+  height: 50px;
+  width: 150px;
+  display: flex;
+  grid-area: 2 / 4 / 3 / 5;
+}
+
+.destroyer {
+  height: 50px;
+  width: 100px;
+  display: flex;
+  grid-area: 2 / 5 / 3 / 6;
+}
+
+.ship-square {
+  background-color: red;
+  height: 50px;
+  width: 50px;
+  border: solid 1px black;
 }

@@ -9,6 +9,43 @@
     <script src="main.js" defer></script>
   </head>
   <body>
+    <div id="piece-selection">
+      <h2 class="header-text">Choose your pieces:</h2>
+      <div id="pieces">
+        <h3>carrier</h3>
+        <div class="carrier" data-length="5" draggable="true">
+          <div class="ship-square"></div>
+          <div class="ship-square"></div>
+          <div class="ship-square"></div>
+          <div class="ship-square"></div>
+          <div class="ship-square"></div>
+        </div>
+        <h3>battleship</h3>
+        <div class="battleship" data-length="4">
+          <div class="ship-square"></div>
+          <div class="ship-square"></div>
+          <div class="ship-square"></div>
+          <div class="ship-square"></div>
+        </div>
+        <h3>cruiser</h3>
+        <div class="cruiser" data-length="3">
+          <div class="ship-square"></div>
+          <div class="ship-square"></div>
+          <div class="ship-square"></div>
+        </div>
+        <h3>submarine</h3>
+        <div class="submarine" data-length="3">
+          <div class="ship-square"></div>
+          <div class="ship-square"></div>
+          <div class="ship-square"></div>
+        </div>
+        <h3>destroyer</h3>
+        <div class="destroyer" data-length="2">
+          <div class="ship-square"></div>
+          <div class="ship-square"></div>
+        </div>
+      </div>
+    </div>
     <main>
       <div class="game-container one">
         <h2>You</h2>
