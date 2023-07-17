@@ -1,11 +1,17 @@
 export const btnStartGame = document.getElementById("btn-start-game");
 export const gameBoards = document.querySelectorAll(".game-board");
+export const shipPieces = document.querySelectorAll('[draggable="true"]');
 const playerOneBoard = document.querySelector(".game-board.one");
 const playerTwoBoard = document.querySelector(".game-board.two");
 const gameContainerOne = document.querySelector(".game-container.one");
 const gameContainerTwo = document.querySelector(".game-container.two");
 
 const body = document.querySelector("body");
+
+const shipPieceParts = {
+  piecesToTheRight: null,
+  shipLength: null,
+};
 
 export function generateGameBoardCoords() {
   gameBoards.forEach((gameBoard) => {
@@ -58,6 +64,112 @@ export function renderPlayerShips(gameboardData) {
     const squareValue = gameboardData.get(square.attributes.coords.value);
     if (squareValue === "water") renderWater(square);
     if (squareValue !== "water") renderShip(square);
+  });
+}
+
+function dragStart(e) {
+  setTimeout(() => {
+    this.classList.add("invisible");
+  }, 0);
+}
+
+function dragEnd(e) {
+  // this.classList.remove("invisible");
+}
+
+function setShipPieceParts(shipPiece) {
+  const shipLength = shipPiece.parentElement.getAttribute("data-length");
+  let piecesToTheRight = 0;
+
+  // count the pieces to the right of the selected shipSquare
+  let el = shipPiece;
+  while (el.nextElementSibling) {
+    console.log(el.nextElementSibling);
+    el = el.nextElementSibling;
+    piecesToTheRight += 1;
+  }
+
+  // return info needed to render the ship dragging over the board effect
+  shipPieceParts.piecesToTheRight = piecesToTheRight;
+  shipPieceParts.shipLength = shipLength;
+}
+
+shipPieces.forEach((shipPiece) => {
+  console.log(shipPiece);
+  shipPiece.addEventListener("dragstart", dragStart);
+  shipPiece.addEventListener("dragend", dragEnd);
+  shipPiece.addEventListener("mousedown", (e) => {
+    console.log(e);
+    setShipPieceParts(e.target);
+  });
+});
+
+function renderShipDragShadow(shipPiecePartsObj) {}
+
+function dragOver(e) {
+  e.preventDefault();
+  console.log("over");
+
+  // render currently hovered el
+  e.target.classList.add("hovered");
+
+  // render siblings to the right
+  let curSibling = e.target.nextElementSibling;
+  for (let i = 0; i < shipPieceParts.piecesToTheRight; i += 1) {
+    curSibling.classList.add("hovered");
+    curSibling = curSibling.nextElementSibling;
+  }
+
+  // render sibling to the left
+  const piecesToTheLeft =
+    shipPieceParts.shipLength - (shipPieceParts.piecesToTheRight + 1);
+  let prevSibling = e.target.previousElementSibling;
+  for (let i = 0; i < piecesToTheLeft; i += 1) {
+    prevSibling.classList.add("hovered");
+    prevSibling = prevSibling.previousElementSibling;
+  }
+}
+
+function dragEnter(e) {
+  e.preventDefault();
+  console.log("enter");
+  console.log("TARGET", e.target);
+  console.log(e.target.nextElementSibling);
+}
+
+function dragLeave(e) {
+  console.log("leave");
+  console.log("TARGET", e.target);
+
+  e.target.classList.remove("hovered");
+  // render siblings to the right
+  let curSibling = e.target.nextElementSibling;
+  for (let i = 0; i < shipPieceParts.piecesToTheRight; i += 1) {
+    curSibling.classList.remove("hovered");
+    curSibling = curSibling.nextElementSibling;
+  }
+
+  // render sibling to the left
+  const piecesToTheLeft =
+    shipPieceParts.shipLength - (shipPieceParts.piecesToTheRight + 1);
+  let prevSibling = e.target.previousElementSibling;
+  for (let i = 0; i < piecesToTheLeft; i += 1) {
+    prevSibling.classList.remove("hovered");
+    prevSibling = prevSibling.previousElementSibling;
+  }
+}
+
+function dragDrop() {
+  console.log("drop");
+}
+
+export function addBoardDragListeners() {
+  console.log(playerOneBoard.childNodes);
+  playerOneBoard.childNodes.forEach((square) => {
+    square.addEventListener("dragover", dragOver);
+    square.addEventListener("dragenter", dragEnter);
+    square.addEventListener("dragleave", dragLeave);
+    square.addEventListener("drop", dragDrop);
   });
 }
 

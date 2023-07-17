@@ -131,3 +131,12 @@ h3 {
 .game-board.one > div.coord-square {
   background-color: #34b1eb;
 }
+
+.invisible {
+  display: none;
+}
+
+.game-board.one > div.coord-square.hovered {
+  background-color: red;
+  border-style: dotted;
+}
