@@ -159,8 +159,29 @@ function dragLeave(e) {
   }
 }
 
-function dragDrop() {
+function dragDrop(e) {
   console.log("drop");
+  this.classList.remove("hovered");
+  this.classList.add("fill");
+  console.log(e.target);
+
+  // render siblings to the right
+  let curSibling = e.target.nextElementSibling;
+  for (let i = 0; i < shipPieceParts.piecesToTheRight; i += 1) {
+    curSibling.classList.remove("hovered");
+    curSibling.classList.add("fill");
+    curSibling = curSibling.nextElementSibling;
+  }
+
+  // render sibling to the left
+  const piecesToTheLeft =
+    shipPieceParts.shipLength - (shipPieceParts.piecesToTheRight + 1);
+  let prevSibling = e.target.previousElementSibling;
+  for (let i = 0; i < piecesToTheLeft; i += 1) {
+    prevSibling.classList.remove("hovered");
+    prevSibling.classList.add("fill");
+    prevSibling = prevSibling.previousElementSibling;
+  }
 }
 
 export function addBoardDragListeners() {
