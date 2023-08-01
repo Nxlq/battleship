@@ -22,6 +22,16 @@ const GameboardFactory = () => {
     destroyer: Ship(2),
   };
 
+  let shipsPlaced = 0;
+
+  function incrementShipsPlaced() {
+    shipsPlaced += 1;
+  }
+
+  function getShipsPlacedCount() {
+    return shipsPlaced;
+  }
+
   const board = new Map([]);
 
   for (let i = 0; i < 10; i += 1) {
@@ -70,7 +80,9 @@ const GameboardFactory = () => {
         return console.error("Invalid Coords");
 
       board.set(coordsToSet.toString(), ship);
+      incrementShipsPlaced();
     }
+    return getShipsPlacedCount();
   };
 
   const getBoard = () => {
@@ -101,13 +113,18 @@ const GameboardFactory = () => {
     if (board.get(target) !== "water") {
       ships[board.get(target)].hit();
       hitAttacks.push(target);
+
+      const shouldEndGame = !hasShipsAlive();
+      if (shouldEndGame) return "game over";
       toggleBoardState();
+
       return board.get(target);
     }
 
     // if the target is water
     missedAttacks.push(coord.toString());
     toggleBoardState();
+
     return board.get(target);
   };
 
@@ -121,6 +138,7 @@ const GameboardFactory = () => {
     hasShipsAlive,
     toggleBoardState,
     isBoardActive,
+    getShipsPlacedCount,
   };
 };
 
