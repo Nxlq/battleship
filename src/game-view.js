@@ -1,3 +1,5 @@
+import { playerOne } from "./index";
+
 export const btnStartGame = document.getElementById("btn-start-game");
 export const gameBoards = document.querySelectorAll(".game-board");
 export const shipPieces = document.querySelectorAll('[draggable="true"]');
@@ -11,7 +13,7 @@ const shipPieceParts = {
   piecesToTheRight: null,
   shipLength: null,
   piecesToTheLeft: null,
-  shipDirection: "v",
+  shipDirection: "h",
   shipType: null,
   curCoord: null,
   shipHeadCoord: null,
@@ -62,7 +64,7 @@ function renderEndScreen() {
   body.style.backgroundColor = "red";
 }
 
-export function renderPlayerShips(gameboardData) {
+export function renderPlayerBoard(gameboardData) {
   const p1Grid = [...playerOneBoard.children];
   p1Grid.forEach((square) => {
     const squareValue = gameboardData.get(square.attributes.coords.value);
@@ -167,7 +169,7 @@ function dragLeave(e) {
 }
 
 // want to use piecesObj and gameboard method to set ship on the backend
-function dragDrop(e, p1SetShip, p2SetShip) {
+function dragDrop(e) {
   console.log("drop");
   this.classList.remove("hovered");
   this.classList.add("fill");
@@ -187,25 +189,35 @@ function dragDrop(e, p1SetShip, p2SetShip) {
         ];
   console.log(shipPieceParts.shipHeadCoord);
   console.log(e.target);
+  console.log(shipPieceParts);
 
-  // render siblings to the right
-  let curSibling = e.target.nextElementSibling;
-  for (let i = 0; i < shipPieceParts.piecesToTheRight; i += 1) {
-    curSibling.classList.remove("hovered");
-    curSibling.classList.add("fill");
-    // curSibling.classList.add("");
-    curSibling = curSibling.nextElementSibling;
-  }
+  playerOne.gameboard.setShip(
+    shipPieceParts.shipHeadCoord,
+    shipPieceParts.shipType,
+    shipPieceParts.shipDirection
+  );
 
-  // render sibling to the left
-  const piecesToTheLeft =
-    shipPieceParts.shipLength - (shipPieceParts.piecesToTheRight + 1);
-  let prevSibling = e.target.previousElementSibling;
-  for (let i = 0; i < piecesToTheLeft; i += 1) {
-    prevSibling.classList.remove("hovered");
-    prevSibling.classList.add("fill");
-    prevSibling = prevSibling.previousElementSibling;
-  }
+  renderPlayerBoard(playerOne.gameboard.getBoard());
+
+  // ------- INSTEAD OF RENDERING BASED ON DOM WE SHOULD RENDER BASED ON THE GAMEBOARDS BACKEND ------- LIKE ABOVE
+  // // render siblings to the right
+  // let curSibling = e.target.nextElementSibling;
+  // for (let i = 0; i < shipPieceParts.piecesToTheRight; i += 1) {
+  //   curSibling.classList.remove("hovered");
+  //   curSibling.classList.add("fill");
+  //   // curSibling.classList.add("");
+  //   curSibling = curSibling.nextElementSibling;
+  // }
+
+  // // render sibling to the left
+  // const piecesToTheLeft =
+  //   shipPieceParts.shipLength - (shipPieceParts.piecesToTheRight + 1);
+  // let prevSibling = e.target.previousElementSibling;
+  // for (let i = 0; i < piecesToTheLeft; i += 1) {
+  //   prevSibling.classList.remove("hovered");
+  //   prevSibling.classList.add("fill");
+  //   prevSibling = prevSibling.previousElementSibling;
+  // }
 }
 
 export function addBoardDragListeners() {

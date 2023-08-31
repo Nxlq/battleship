@@ -5,14 +5,14 @@ import {
   btnStartGame,
   addBoardCoordEventListeners,
   addBoardDragListeners,
-  renderPlayerShips,
+  renderPlayerBoard,
   renderPlayerOneAttackable,
   renderPlayerTwoAttackable,
   gameBoards,
   shipPieces,
 } from "./game-view";
 
-const playerOne = newPlayer();
+export const playerOne = newPlayer();
 const playerTwo = newComputer();
 
 function renderActiveTurn() {
@@ -23,10 +23,7 @@ function renderActiveTurn() {
 
 window.addEventListener("DOMContentLoaded", () => {
   generateGameBoardCoords();
-  addBoardDragListeners(
-    playerOne.gameboard.setShip,
-    playerTwo.gameboard.setShip
-  );
+  addBoardDragListeners();
   // addBoardCoordEventListeners(
   //   playerOne.gameboard.receiveAttack,
   //   playerTwo.gameboard.receiveAttack,
