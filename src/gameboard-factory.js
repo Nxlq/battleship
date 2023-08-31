@@ -74,6 +74,7 @@ const GameboardFactory = () => {
     for (let i = 0; i < shipLength; i += 1) {
       const coordsToSet =
         direction === "h" ? [coord[0], coord[1] + i] : [coord[0] + i, coord[1]];
+      console.log({ coord, coordsToSet });
 
       // !BUG HERE , DOES NOT CHECK ALL COORDS BEFORE ALTERING THE GAME BOARD STATE, NEED TO REFACTOR THIS LATER WHEN IMPLEMENTING DYNAMIC SHIP PLACEMENT VIA DOM INTERACTION
       if (board.get(coordsToSet.toString()) !== "water")
@@ -81,6 +82,7 @@ const GameboardFactory = () => {
 
       board.set(coordsToSet.toString(), ship);
       incrementShipsPlaced();
+      console.log(getShipsPlacedCount());
     }
     return getShipsPlacedCount();
   };

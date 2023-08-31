@@ -5,12 +5,16 @@ const playerOneBoard = document.querySelector(".game-board.one");
 const playerTwoBoard = document.querySelector(".game-board.two");
 const gameContainerOne = document.querySelector(".game-container.one");
 const gameContainerTwo = document.querySelector(".game-container.two");
-
 const body = document.querySelector("body");
 
 const shipPieceParts = {
   piecesToTheRight: null,
   shipLength: null,
+  piecesToTheLeft: null,
+  shipDirection: "v",
+  shipType: null,
+  curCoord: null,
+  shipHeadCoord: null,
 };
 
 export function generateGameBoardCoords() {
@@ -68,6 +72,8 @@ export function renderPlayerShips(gameboardData) {
 }
 
 function dragStart(e) {
+  console.log("start", e);
+  [shipPieceParts.shipType] = e.target.classList;
   setTimeout(() => {
     this.classList.add("invisible");
   }, 0);
@@ -77,6 +83,7 @@ function dragEnd(e) {
   // this.classList.remove("invisible");
 }
 
+// this function is called on mousedown on shipPiece below // sets obj property
 function setShipPieceParts(shipPiece) {
   const shipLength = shipPiece.parentElement.getAttribute("data-length");
   let piecesToTheRight = 0;
@@ -92,6 +99,8 @@ function setShipPieceParts(shipPiece) {
   // return info needed to render the ship dragging over the board effect
   shipPieceParts.piecesToTheRight = piecesToTheRight;
   shipPieceParts.shipLength = shipLength;
+  shipPieceParts.piecesToTheLeft =
+    shipPieceParts.shipLength - (shipPieceParts.piecesToTheRight + 1);
 }
 
 shipPieces.forEach((shipPiece) => {
@@ -103,8 +112,6 @@ shipPieces.forEach((shipPiece) => {
     setShipPieceParts(e.target);
   });
 });
-
-function renderShipDragShadow(shipPiecePartsObj) {}
 
 function dragOver(e) {
   e.preventDefault();
@@ -159,10 +166,26 @@ function dragLeave(e) {
   }
 }
 
-function dragDrop(e) {
+// want to use piecesObj and gameboard method to set ship on the backend
+function dragDrop(e, p1SetShip, p2SetShip) {
   console.log("drop");
   this.classList.remove("hovered");
   this.classList.add("fill");
+  shipPieceParts.curCoord = this.getAttribute("coords")
+    .split(",")
+    .map((coord) => +coord);
+  // calculates coord location of the ship head and sets it in the shipsPiecesOBJ so we can pass it into the set ship function on the backend, that way we dont have to refactor the gameboards method
+  shipPieceParts.shipHeadCoord =
+    shipPieceParts.shipDirection === "h"
+      ? [
+          shipPieceParts.curCoord[0],
+          shipPieceParts.curCoord[1] - shipPieceParts.piecesToTheLeft,
+        ]
+      : [
+          shipPieceParts.curCoord[0] - shipPieceParts.piecesToTheLeft,
+          shipPieceParts.curCoord[1],
+        ];
+  console.log(shipPieceParts.shipHeadCoord);
   console.log(e.target);
 
   // render siblings to the right
@@ -170,6 +193,7 @@ function dragDrop(e) {
   for (let i = 0; i < shipPieceParts.piecesToTheRight; i += 1) {
     curSibling.classList.remove("hovered");
     curSibling.classList.add("fill");
+    // curSibling.classList.add("");
     curSibling = curSibling.nextElementSibling;
   }
 

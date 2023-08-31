@@ -23,7 +23,10 @@ function renderActiveTurn() {
 
 window.addEventListener("DOMContentLoaded", () => {
   generateGameBoardCoords();
-  addBoardDragListeners();
+  addBoardDragListeners(
+    playerOne.gameboard.setShip,
+    playerTwo.gameboard.setShip
+  );
   // addBoardCoordEventListeners(
   //   playerOne.gameboard.receiveAttack,
   //   playerTwo.gameboard.receiveAttack,
