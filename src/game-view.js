@@ -129,13 +129,19 @@ function dragOver(e) {
   }
 
   if (shipPieceParts.shipDirection === "h") {
+    // remove render on previously hovered veritcal els
+    shipPieceParts.verticalHoverElArr?.forEach((el) =>
+      el.classList.remove("hovered")
+    );
+
     // render currently hovered el
     e.target.classList.add("hovered");
 
-    // render siblings to the right
+    // arr to store the horizontal hovered els so that they can be undrendered when changing piece placement to vertical
     const horizontalElArr = [];
     horizontalElArr.push(e.target);
 
+    // render siblings to the right
     let curSibling = e.target.nextElementSibling;
     for (let i = 0; i < shipPieceParts.piecesToTheRight; i += 1) {
       curSibling.classList.add("hovered");
@@ -159,11 +165,14 @@ function dragOver(e) {
   }
 
   if (shipPieceParts.shipDirection === "v") {
-    // remove horizontal hover renders
+    // remove render on previously hovered horizontal els
     shipPieceParts.horizontalHoverElArr.forEach((el) =>
       el.classList.remove("hovered")
     );
 
+    // arr to store the vertical hovered els so that they can be undrendered when changing piece placement to horizontal
+    const verticalElArr = [];
+    verticalElArr.push(e.target);
     // render currently hovered el
     e.target.classList.add("hovered");
 
@@ -174,7 +183,9 @@ function dragOver(e) {
           shipPieceParts.curCoord[1]
         }"]`
       );
+      //! BUG here -> need to handle what happens when square doesnt have a value (for example if the user hovers vertically off the board)
       square.classList.add("hovered");
+      verticalElArr.push(square);
     }
 
     // render siblings below
@@ -185,7 +196,10 @@ function dragOver(e) {
         }"]`
       );
       square.classList.add("hovered");
+      verticalElArr.push(square);
     }
+    shipPieceParts.verticalHoverElArr = verticalElArr;
+    console.log(shipPieceParts.verticalHoverElArr);
   }
 }
 
