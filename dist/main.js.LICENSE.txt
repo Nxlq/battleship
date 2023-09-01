@@ -1,0 +1,1 @@
+//! BUG here -> need to handle what happens when square doesnt have a value (for example if the user hovers vertically off the board)
