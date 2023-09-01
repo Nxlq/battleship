@@ -17,6 +17,9 @@ const shipPieceParts = {
   shipType: null,
   curCoord: null,
   shipHeadCoord: null,
+  isDragging: false,
+  verticalHoverElArr: null,
+  horizontalHoverElArr: null,
 };
 
 export function generateGameBoardCoords() {
@@ -76,6 +79,7 @@ export function renderPlayerBoard(gameboardData) {
 function dragStart(e) {
   console.log("start", e);
   [shipPieceParts.shipType] = e.target.classList;
+  shipPieceParts.shipDirection = "h";
   setTimeout(() => {
     this.classList.add("invisible");
   }, 0);
@@ -118,24 +122,70 @@ shipPieces.forEach((shipPiece) => {
 function dragOver(e) {
   e.preventDefault();
   console.log("over");
-
-  // render currently hovered el
-  e.target.classList.add("hovered");
-
-  // render siblings to the right
-  let curSibling = e.target.nextElementSibling;
-  for (let i = 0; i < shipPieceParts.piecesToTheRight; i += 1) {
-    curSibling.classList.add("hovered");
-    curSibling = curSibling.nextElementSibling;
+  if (e.ctrlKey === true) {
+    shipPieceParts.shipDirection = "v";
+  } else {
+    shipPieceParts.shipDirection = "h";
   }
 
-  // render sibling to the left
-  const piecesToTheLeft =
-    shipPieceParts.shipLength - (shipPieceParts.piecesToTheRight + 1);
-  let prevSibling = e.target.previousElementSibling;
-  for (let i = 0; i < piecesToTheLeft; i += 1) {
-    prevSibling.classList.add("hovered");
-    prevSibling = prevSibling.previousElementSibling;
+  if (shipPieceParts.shipDirection === "h") {
+    // render currently hovered el
+    e.target.classList.add("hovered");
+
+    // render siblings to the right
+    const horizontalElArr = [];
+    horizontalElArr.push(e.target);
+
+    let curSibling = e.target.nextElementSibling;
+    for (let i = 0; i < shipPieceParts.piecesToTheRight; i += 1) {
+      curSibling.classList.add("hovered");
+      horizontalElArr.push(curSibling);
+      console.log(horizontalElArr);
+      curSibling = curSibling.nextElementSibling;
+    }
+
+    // render sibling to the left
+    const piecesToTheLeft =
+      shipPieceParts.shipLength - (shipPieceParts.piecesToTheRight + 1);
+    let prevSibling = e.target.previousElementSibling;
+    for (let i = 0; i < piecesToTheLeft; i += 1) {
+      prevSibling.classList.add("hovered");
+      horizontalElArr.push(prevSibling);
+      prevSibling = prevSibling.previousElementSibling;
+    }
+
+    // store horizontal els for render removal on direction change to vertical for proper hover display
+    shipPieceParts.horizontalHoverElArr = horizontalElArr;
+  }
+
+  if (shipPieceParts.shipDirection === "v") {
+    // remove horizontal hover renders
+    shipPieceParts.horizontalHoverElArr.forEach((el) =>
+      el.classList.remove("hovered")
+    );
+
+    // render currently hovered el
+    e.target.classList.add("hovered");
+
+    // render siblings above
+    for (let i = 0; i < shipPieceParts.piecesToTheLeft; i += 1) {
+      const square = document.querySelector(
+        `[coords="${shipPieceParts.curCoord[0] - (i + 1)},${
+          shipPieceParts.curCoord[1]
+        }"]`
+      );
+      square.classList.add("hovered");
+    }
+
+    // render siblings below
+    for (let i = 0; i < shipPieceParts.piecesToTheRight; i += 1) {
+      const square = document.querySelector(
+        `[coords="${shipPieceParts.curCoord[0] + (i + 1)},${
+          shipPieceParts.curCoord[1]
+        }"]`
+      );
+      square.classList.add("hovered");
+    }
   }
 }
 
@@ -144,27 +194,57 @@ function dragEnter(e) {
   console.log("enter");
   console.log("TARGET", e.target);
   console.log(e.target.nextElementSibling);
+  shipPieceParts.curCoord = this.getAttribute("coords")
+    .split(",")
+    .map((coord) => +coord);
 }
 
 function dragLeave(e) {
   console.log("leave");
   console.log("TARGET", e.target);
+  console.log(shipPieceParts.curCoord);
+
+  // this var is used for the vertical piece placement hover render since the shipPiece objs curcoord is updated on entering a square
+  const targetCoords = e.target
+    .getAttribute("coords")
+    .split(",")
+    .map((coord) => +coord);
 
   e.target.classList.remove("hovered");
-  // render siblings to the right
-  let curSibling = e.target.nextElementSibling;
-  for (let i = 0; i < shipPieceParts.piecesToTheRight; i += 1) {
-    curSibling.classList.remove("hovered");
-    curSibling = curSibling.nextElementSibling;
+  if (shipPieceParts.shipDirection === "h") {
+    // remove render on siblings to the right
+    let curSibling = e.target.nextElementSibling;
+    for (let i = 0; i < shipPieceParts.piecesToTheRight; i += 1) {
+      curSibling.classList.remove("hovered");
+      curSibling = curSibling.nextElementSibling;
+    }
+
+    // remove render on sibling to the left
+    const piecesToTheLeft =
+      shipPieceParts.shipLength - (shipPieceParts.piecesToTheRight + 1);
+    let prevSibling = e.target.previousElementSibling;
+    for (let i = 0; i < piecesToTheLeft; i += 1) {
+      prevSibling.classList.remove("hovered");
+      prevSibling = prevSibling.previousElementSibling;
+    }
   }
 
-  // render sibling to the left
-  const piecesToTheLeft =
-    shipPieceParts.shipLength - (shipPieceParts.piecesToTheRight + 1);
-  let prevSibling = e.target.previousElementSibling;
-  for (let i = 0; i < piecesToTheLeft; i += 1) {
-    prevSibling.classList.remove("hovered");
-    prevSibling = prevSibling.previousElementSibling;
+  if (shipPieceParts.shipDirection === "v") {
+    // remove render on siblings above
+    for (let i = 0; i < shipPieceParts.piecesToTheLeft; i += 1) {
+      const square = document.querySelector(
+        `[coords="${targetCoords[0] - (i + 1)},${targetCoords[1]}"]`
+      );
+      square.classList.remove("hovered");
+    }
+
+    // remove render on siblings below
+    for (let i = 0; i < shipPieceParts.piecesToTheRight; i += 1) {
+      const square = document.querySelector(
+        `[coords="${targetCoords[0] + (i + 1)},${targetCoords[1]}"]`
+      );
+      square.classList.remove("hovered");
+    }
   }
 }
 
@@ -173,9 +253,6 @@ function dragDrop(e) {
   console.log("drop");
   this.classList.remove("hovered");
   this.classList.add("fill");
-  shipPieceParts.curCoord = this.getAttribute("coords")
-    .split(",")
-    .map((coord) => +coord);
   // calculates coord location of the ship head and sets it in the shipsPiecesOBJ so we can pass it into the set ship function on the backend, that way we dont have to refactor the gameboards method
   shipPieceParts.shipHeadCoord =
     shipPieceParts.shipDirection === "h"
