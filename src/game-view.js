@@ -9,6 +9,9 @@ const gameContainerOne = document.querySelector(".game-container.one");
 const gameContainerTwo = document.querySelector(".game-container.two");
 const body = document.querySelector("body");
 
+const shipSquareColor = "red";
+const shipWaterColor = "cyan";
+
 const shipPieceParts = {
   piecesToTheRight: null,
   shipLength: null,
@@ -50,11 +53,11 @@ export function renderPlayerTwoAttackable() {
 }
 
 function renderWater(targettedSquare) {
-  targettedSquare.style.backgroundColor = "#34b1eb";
+  targettedSquare.classList.add("water");
 }
 
 function renderShip(targettedSquare) {
-  targettedSquare.style.backgroundColor = "#9c0000";
+  targettedSquare.classList.add("ship");
 }
 
 function renderX(targettedSquare) {
@@ -72,7 +75,10 @@ export function renderPlayerBoard(gameboardData) {
   p1Grid.forEach((square) => {
     const squareValue = gameboardData.get(square.attributes.coords.value);
     if (squareValue === "water") renderWater(square);
-    if (squareValue !== "water") renderShip(square);
+    if (squareValue !== "water") {
+      square.classList.remove("hovered");
+      renderShip(square);
+    }
   });
 }
 
@@ -80,6 +86,8 @@ function dragStart(e) {
   console.log("start", e);
   [shipPieceParts.shipType] = e.target.classList;
   shipPieceParts.shipDirection = "h";
+  shipPieceParts.verticalHoverElArr = null;
+  shipPieceParts.horizontalHoverElArr = null;
   setTimeout(() => {
     this.classList.add("invisible");
   }, 0);
@@ -156,6 +164,7 @@ function dragOver(e) {
     let prevSibling = e.target.previousElementSibling;
     for (let i = 0; i < piecesToTheLeft; i += 1) {
       prevSibling.classList.add("hovered");
+      // prevSibling.style.backgroundColor = "red";
       horizontalElArr.push(prevSibling);
       prevSibling = prevSibling.previousElementSibling;
     }
@@ -266,7 +275,7 @@ function dragLeave(e) {
 function dragDrop(e) {
   console.log("drop");
   this.classList.remove("hovered");
-  this.classList.add("fill");
+  this.classList.add("ship");
   // calculates coord location of the ship head and sets it in the shipsPiecesOBJ so we can pass it into the set ship function on the backend, that way we dont have to refactor the gameboards method
   shipPieceParts.shipHeadCoord =
     shipPieceParts.shipDirection === "h"

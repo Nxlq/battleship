@@ -121,6 +121,7 @@ h3 {
   grid-area: 2 / 5 / 3 / 6;
 }
 
+/* this class is applied to the ship pieces above the board !~ NOT ON THE BOARD */
 .ship-square {
   background-color: red;
   height: 50px;
@@ -144,4 +145,14 @@ h3 {
 .game-board.one > div.coord-square.fill {
   background-color: red;
   border: solid 1px black;
+}
+
+/* this class applied to ships placed on the board */
+.game-board.one > div.coord-square.ship {
+  background-color: red;
+  border: solid 1px black;
+}
+
+.water {
+  background-color: #34b1eb;
 }
