@@ -9,7 +9,7 @@ const GameboardFactory = () => {
     canBoardBeAttacked = canBoardBeAttacked !== true;
   }
 
-  const isBoardActive = function () {
+  const isBoardActive = () => {
     console.log(canBoardBeAttacked);
     return canBoardBeAttacked;
   };
@@ -87,7 +87,7 @@ const GameboardFactory = () => {
       incrementShipsPlaced();
       console.log(getShipsPlacedCount());
     }
-    return getShipsPlacedCount();
+    return true;
   };
 
   const getBoard = () => {
