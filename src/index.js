@@ -4,7 +4,7 @@ import {
   generateGameBoardCoords,
   btnStartGame,
   addBoardCoordEventListeners,
-  addBoardDragListeners,
+  addDragListeners,
   renderPlayerBoard,
   renderPlayerOneAttackable,
   renderPlayerTwoAttackable,
@@ -23,7 +23,7 @@ function renderActiveTurn() {
 
 window.addEventListener("DOMContentLoaded", () => {
   generateGameBoardCoords();
-  addBoardDragListeners();
+  addDragListeners();
   // addBoardCoordEventListeners(
   //   playerOne.gameboard.receiveAttack,
   //   playerTwo.gameboard.receiveAttack,
