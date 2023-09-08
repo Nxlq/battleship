@@ -22,19 +22,40 @@ const newComputer = () => {
 
   function generateCoordsForShipPlacement() {
     const coords = [generateRandomNumber(0, 9), generateRandomNumber(0, 9)];
+    return coords;
   }
 
   function placeShipsRandomly() {
     const placements = {
-      carrier: generateCoordsForShipPlacement(),
-      battleship: generateCoordsForShipPlacement(),
-      cruiser: generateCoordsForShipPlacement(),
-      submarine: generateCoordsForShipPlacement(),
-      destroyer: generateCoordsForShipPlacement(),
+      carrier: generateRandomDirection(),
+      battleship: generateRandomDirection(),
+      cruiser: generateRandomDirection(),
+      submarine: generateRandomDirection(),
+      destroyer: generateRandomDirection(),
     };
+
+    // loop over placements obj and call setShip on each ship until all ships have been placed
+    Object.entries(placements).forEach((entry) => {
+      const [ship, direction] = entry;
+      console.log(ship, direction);
+      // attempt to set the ship on the board
+      let hasShipBeenPlaced = gameboard.setShip(
+        generateCoordsForShipPlacement(),
+        ship,
+        direction
+      );
+      // if the attempt was given invalid coords, keep attempting with new coords until it has been placed
+      while (!hasShipBeenPlaced) {
+        hasShipBeenPlaced = gameboard.setShip(
+          generateCoordsForShipPlacement(),
+          ship,
+          direction
+        );
+      }
+    });
   }
 
-  return { gameboard, generateRandomDirection };
+  return { gameboard, placeShipsRandomly };
 };
 
 export default newComputer;

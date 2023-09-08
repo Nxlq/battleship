@@ -14,11 +14,8 @@ import {
 
 export const playerOne = newPlayer();
 export const playerTwo = newComputer();
-
-for (let i = 0; i < 40; i += 1) {
-  playerTwo.generateRandomDirection();
-}
-
+playerTwo.placeShipsRandomly();
+playerTwo.gameboard.getBoard();
 window.addEventListener("DOMContentLoaded", () => {
   generateGameBoardCoords();
   addDragListeners();

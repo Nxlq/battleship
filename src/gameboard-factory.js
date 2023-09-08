@@ -70,6 +70,7 @@ const GameboardFactory = () => {
       return console.error("invalid placement position");
 
     const shipLength = ships[ship].length;
+    const validCoordsArr = [];
 
     // place ship along coordinates
     for (let i = 0; i < shipLength; i += 1) {
@@ -77,14 +78,14 @@ const GameboardFactory = () => {
         direction === "h" ? [coord[0], coord[1] + i] : [coord[0] + i, coord[1]];
       console.log({ coord, coordsToSet });
 
-      // !BUG HERE , DOES NOT CHECK ALL COORDS BEFORE ALTERING THE GAME BOARD STATE, NEED TO REFACTOR THIS LATER WHEN IMPLEMENTING DYNAMIC SHIP PLACEMENT VIA DOM INTERACTION
-      if (board.get(coordsToSet.toString()) !== "water")
+      if (board.get(coordsToSet.toString()) !== "water") {
         return console.error(
           "invalid coords: cannot place ships on top of each other"
         );
-
-      board.set(coordsToSet.toString(), ship);
+      }
+      validCoordsArr.push(coordsToSet);
     }
+    validCoordsArr.forEach((coords) => board.set(coords.toString(), ship));
     incrementShipsPlaced();
     console.log(getShipsPlacedCount());
     return true;

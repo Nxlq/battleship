@@ -155,7 +155,7 @@ h3.header-text {
 }
 
 /* this class applied to ships placed on the board */
-.game-board.one > div.coord-square.ship {
+.game-board > div.coord-square.ship {
   background-color: red;
   border: solid 1px black;
 }
