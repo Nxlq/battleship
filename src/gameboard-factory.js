@@ -84,9 +84,9 @@ const GameboardFactory = () => {
         );
 
       board.set(coordsToSet.toString(), ship);
-      incrementShipsPlaced();
-      console.log(getShipsPlacedCount());
     }
+    incrementShipsPlaced();
+    console.log(getShipsPlacedCount());
     return true;
   };
 

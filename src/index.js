@@ -13,12 +13,10 @@ import {
 } from "./game-view";
 
 export const playerOne = newPlayer();
-const playerTwo = newComputer();
+export const playerTwo = newComputer();
 
-function renderActiveTurn() {
-  if (playerOne.gameboard.isBoardActive()) return renderPlayerOneAttackable();
-  if (playerTwo.gameboard.isBoardActive()) return renderPlayerTwoAttackable();
-  return "error neither board is active?";
+for (let i = 0; i < 40; i += 1) {
+  playerTwo.generateRandomDirection();
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -54,6 +52,6 @@ btnStartGame.addEventListener("click", () => {
   // console.log(playerOne.gameboard.receiveAttack([2, 2]));
 });
 
-gameBoards.forEach((board) => {
-  board.addEventListener("click", renderActiveTurn);
-});
+// gameBoards.forEach((board) => {
+//
+// });

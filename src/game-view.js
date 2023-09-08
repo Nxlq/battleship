@@ -1,4 +1,4 @@
-import { playerOne } from "./index";
+import { playerOne, playerTwo } from "./index";
 
 export const btnStartGame = document.getElementById("btn-start-game");
 export const gameBoards = document.querySelectorAll(".game-board");
@@ -64,6 +64,12 @@ function renderX(targettedSquare) {
   const peg = document.createElement("div");
   peg.classList.add("marked");
   targettedSquare.appendChild(peg);
+}
+
+function renderActiveTurn() {
+  if (playerOne.gameboard.isBoardActive()) return renderPlayerOneAttackable();
+  if (playerTwo.gameboard.isBoardActive()) return renderPlayerTwoAttackable();
+  return "error neither board is active?";
 }
 
 function renderEndScreen() {
@@ -313,6 +319,12 @@ function dragDrop(e) {
   this.classList.add("ship");
   shipDropped.classList.add("invisible");
   renderPlayerBoard(playerOne.gameboard.getBoard());
+  const shipsPlacedCount = playerOne.gameboard.getShipsPlacedCount();
+  if (shipsPlacedCount === 5) {
+    addBoardCoordEventListeners();
+    playerTwo.gameboard.toggleBoardState();
+    renderActiveTurn();
+  }
 
   // ------- INSTEAD OF RENDERING BASED ON DOM WE SHOULD RENDER BASED ON THE GAMEBOARDS BACKEND ------- LIKE ABOVE
   // // render siblings to the right
@@ -347,14 +359,11 @@ export function addDragListeners() {
 
 // !~ The functionality of this function should be split into specific event listeners for each board, should be refactored if desired cleaner code ~!
 // breaks dry principles because of the handling of variables and forEach method -- if I was passionate for this project refactor is a must
-export function addBoardCoordEventListeners(
-  playerOneRecieveAttack,
-  playerTwoRecieveAttack,
-  playerOneToggleTurn,
-  playerTwoToggleTurn
-) {
+export function addBoardCoordEventListeners() {
+  if (playerOne.gameboard.getShipsPlacedCount() !== 5) return;
   gameBoards.forEach((gameBoard) => {
     const grid = [...gameBoard.children];
+    gameBoard.addEventListener("click", renderActiveTurn);
     grid.forEach((gridSquare) =>
       gridSquare.addEventListener("click", (e) => {
         if (!e.target.classList.contains("coord-square")) return;
@@ -364,18 +373,18 @@ export function addBoardCoordEventListeners(
         if (e.target.parentElement.classList.contains("one")) {
           // if the attack is invalid then the receive attack function will return false and the turns should not be toggled
           // only if the attack is valid then toggle turns and continue game flow
-          const result = playerOneRecieveAttack(targettedCoords);
+          const result = playerOne.gameboard.receiveAttack(targettedCoords);
           if (!result) return;
           if (result === "game over") renderEndScreen();
           renderX(e.target);
-          playerTwoToggleTurn();
+          playerTwo.gameboard.toggleBoardState();
         } else {
-          const result = playerTwoRecieveAttack(targettedCoords);
+          const result = playerTwo.gameboard.receiveAttack(targettedCoords);
           if (!result) return;
           if (result === "water") renderWater(e.target);
           if (result !== "water") renderShip(e.target);
           if (result === "game over") renderEndScreen();
-          playerOneToggleTurn();
+          playerOne.gameboard.toggleBoardState();
         }
       })
     );
