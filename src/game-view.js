@@ -23,6 +23,7 @@ const shipPieceParts = {
   isDragging: false,
   verticalHoverElArr: null,
   horizontalHoverElArr: null,
+  targettedShip: null,
 };
 
 export function generateGameBoardCoords() {
@@ -92,11 +93,15 @@ export function renderPlayerBoard(gameboardData) {
 }
 
 function dragStart(e) {
+  if (e.target.classList.contains("invisible")) return;
   console.log("start", e);
   [shipPieceParts.shipType] = e.target.classList;
   shipPieceParts.shipDirection = "h";
   shipPieceParts.verticalHoverElArr = null;
   shipPieceParts.horizontalHoverElArr = null;
+  shipPieceParts.targettedShip = document.querySelector(
+    `.${shipPieceParts.shipType}`
+  );
   // setTimeout(() => {
   //   this.classList.add("invisible");
   // }, 0);
@@ -139,6 +144,7 @@ shipPieces.forEach((shipPiece) => {
 function dragOver(e) {
   e.preventDefault();
   console.log("over");
+  if (shipPieceParts.targettedShip.classList.contains("invisible")) return;
   if (e.ctrlKey === true) {
     shipPieceParts.shipDirection = "v";
   } else {
@@ -283,8 +289,7 @@ function dragLeave(e) {
 // want to use piecesObj and gameboard method to set ship on the backend
 function dragDrop(e) {
   console.log(e.target, "!!!!!!!");
-  const shipDropped = document.querySelector(`.${shipPieceParts.shipType}`);
-
+  if (shipPieceParts.targettedShip.classList.contains("invisible")) return;
   // calculates coord location of the ship head and sets it in the shipsPiecesOBJ so we can pass it into the set ship function on the backend, that way we dont have to refactor the gameboards method
   shipPieceParts.shipHeadCoord =
     shipPieceParts.shipDirection === "h"
@@ -310,20 +315,21 @@ function dragDrop(e) {
   ) {
     console.log("UNSUCCESSFUL");
     renderPlayerBoard(playerOne.gameboard.getBoard());
-    shipDropped.classList.remove("invisible");
+    shipPieceParts.targettedShip.classList.remove("invisible");
 
     return;
   }
   console.log("drop");
   this.classList.remove("hovered");
   this.classList.add("ship");
-  shipDropped.classList.add("invisible");
+  shipPieceParts.targettedShip.classList.add("invisible");
   renderPlayerBoard(playerOne.gameboard.getBoard());
   const shipsPlacedCount = playerOne.gameboard.getShipsPlacedCount();
   if (shipsPlacedCount === 5) {
     addBoardCoordEventListeners();
     playerTwo.gameboard.toggleBoardState();
     renderActiveTurn();
+    removeDragListeners();
   }
 
   // ------- INSTEAD OF RENDERING BASED ON DOM WE SHOULD RENDER BASED ON THE GAMEBOARDS BACKEND ------- LIKE ABOVE
@@ -354,6 +360,15 @@ export function addDragListeners() {
     square.addEventListener("dragenter", dragEnter);
     square.addEventListener("dragleave", dragLeave);
     square.addEventListener("drop", dragDrop);
+  });
+}
+
+function removeDragListeners() {
+  playerOneBoard.childNodes.forEach((square) => {
+    square.removeEventListener("dragover", dragOver);
+    square.removeEventListener("dragenter", dragEnter);
+    square.removeEventListener("dragleave", dragLeave);
+    square.removeEventListener("drop", dragDrop);
   });
 }
 
