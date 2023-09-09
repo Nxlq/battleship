@@ -75,13 +75,28 @@ h3.header-text {
   display: inline-block;
 }
 
-#piece-selection {
-  width: 100%;
+.header {
+  color: white;
+  font-size: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 20%;
+
+  /* justify-items: flex-start; */
+  /* margin-bottom: 5rem; */
+  /* height: 100%; */
+}
+
+.header#piece-selection {
+  width: 100%;
+  height: fit-content;
   border-bottom: solid 1px lightyellow;
   margin-bottom: 40px;
+}
+
+.header#piece-selection {
+  font-size: 1rem;
 }
 
 #pieces {

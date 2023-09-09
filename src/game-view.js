@@ -7,6 +7,7 @@ const playerOneBoard = document.querySelector(".game-board.one");
 const playerTwoBoard = document.querySelector(".game-board.two");
 const gameContainerOne = document.querySelector(".game-container.one");
 const gameContainerTwo = document.querySelector(".game-container.two");
+const pieceSelectionContainer = document.getElementById("piece-selection");
 const body = document.querySelector("body");
 
 const shipSquareColor = "red";
@@ -90,6 +91,21 @@ export function renderPlayerBoard(gameboardData) {
       renderShip(square);
     }
   });
+}
+
+function removePieceSelectionFromDOM() {
+  body.removeChild(pieceSelectionContainer);
+}
+
+function addGameStartHeaderToDOM() {
+  const gameStartHeader = document.createElement("div");
+  gameStartHeader.classList.add("header");
+
+  const headerText = document.createElement("h2");
+  headerText.textContent = "Begin!";
+  gameStartHeader.appendChild(headerText);
+
+  body.insertAdjacentElement("afterbegin", gameStartHeader);
 }
 
 function dragStart(e) {
@@ -330,6 +346,8 @@ function dragDrop(e) {
     playerTwo.gameboard.toggleBoardState();
     renderActiveTurn();
     removeDragListeners();
+    removePieceSelectionFromDOM();
+    addGameStartHeaderToDOM();
   }
 
   // ------- INSTEAD OF RENDERING BASED ON DOM WE SHOULD RENDER BASED ON THE GAMEBOARDS BACKEND ------- LIKE ABOVE
@@ -408,15 +426,6 @@ export function addBoardCoordEventListeners() {
       playerTwo.gameboard.toggleBoardState();
     })
   );
-  // removed board ones functionality
-  // if (e.target.parentElement.classList.contains("one")) {
-  // if the attack is invalid then the receive attack function will return false and the turns should not be toggled
-  // only if the attack is valid then toggle turns and continue game flow
-  // const result = playerOne.gameboard.receiveAttack(targettedCoords);
-  // if (!result) return;
-  // if (result === "game over") renderEndScreen();
-  // renderX(e.target);
-  // playerTwo.gameboard.toggleBoardState();
 }
 
 // listens to click event, checks if the baord is active/if it the players turn, calls receive attack function if so, and do nothing if it the board isnt supposed to be active
