@@ -1,4 +1,3 @@
-import { playerTwo } from ".";
 import GameboardFactory from "./gameboard-factory";
 
 const newComputer = () => {
@@ -13,25 +12,26 @@ const newComputer = () => {
     return number === 0 ? "h" : "v";
   }
 
+  function generateCoordsForShipPlacement() {
+    const coords = [generateRandomNumber(0, 9), generateRandomNumber(0, 9)];
+    return coords;
+  }
+
   function generateValidAttackCoords(
     enemyBoardsMissedAttacks,
     enemyBoardsHitAttacks
   ) {
-    let coords = [
-      generateRandomNumber(0, 9),
-      generateRandomNumber(0, 9),
-    ].toString();
+    let coords = generateCoordsForShipPlacement().toString();
+
+    // if the coords arent valid then generate new ones
     while (
       enemyBoardsMissedAttacks.includes(coords) ||
       enemyBoardsHitAttacks.includes(coords)
     ) {
-      coords = [generateRandomNumber(0, 9), generateRandomNumber(0, 9)];
+      coords = generateCoordsForShipPlacement().toString();
     }
-    return coords;
-  }
 
-  function generateCoordsForShipPlacement() {
-    const coords = [generateRandomNumber(0, 9), generateRandomNumber(0, 9)];
+    // returns coords as a string
     return coords;
   }
 
@@ -47,7 +47,7 @@ const newComputer = () => {
     // loop over placements obj and call setShip on each ship until all ships have been placed
     Object.entries(placements).forEach((entry) => {
       const [ship, direction] = entry;
-      console.log(ship, direction);
+
       // attempt to set the ship on the board
       let hasShipBeenPlaced = gameboard.setShip(
         generateCoordsForShipPlacement(),
@@ -75,7 +75,7 @@ const newComputer = () => {
       enemyBoardsHitAttacks
     );
     const atkResult = enemyBoardsRecieveAttack(coords);
-    return { atkResult, coords: coords.toString() };
+    return { atkResult, coords };
   }
 
   return { gameboard, placeShipsRandomly, playComputerTurn };

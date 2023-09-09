@@ -376,45 +376,47 @@ function removeDragListeners() {
 // breaks dry principles because of the handling of variables and forEach method -- if I was passionate for this project refactor is a must
 export function addBoardCoordEventListeners() {
   if (playerOne.gameboard.getShipsPlacedCount() !== 5) return;
-  gameBoards.forEach((gameBoard) => {
-    const grid = [...gameBoard.children];
-    gameBoard.addEventListener("click", renderActiveTurn);
-    grid.forEach((gridSquare) =>
-      gridSquare.addEventListener("click", (e) => {
-        if (!e.target.classList.contains("coord-square")) return;
-        const targettedCoords = e.target.attributes.coords.value;
-        console.log(targettedCoords);
 
-        // if (e.target.parentElement.classList.contains("one")) {
-        // if the attack is invalid then the receive attack function will return false and the turns should not be toggled
-        // only if the attack is valid then toggle turns and continue game flow
-        // const result = playerOne.gameboard.receiveAttack(targettedCoords);
-        // if (!result) return;
-        // if (result === "game over") renderEndScreen();
-        // renderX(e.target);
-        // playerTwo.gameboard.toggleBoardState();
+  const grid = [...playerTwoBoard.children];
+  grid.forEach((gridSquare) =>
+    gridSquare.addEventListener("click", (e) => {
+      if (!e.target.classList.contains("coord-square")) return;
+      const targettedCoords = e.target.attributes.coords.value;
+      console.log(targettedCoords);
 
-        const result = playerTwo.gameboard.receiveAttack(targettedCoords);
-        if (!result) return;
-        if (result === "water") renderWater(e.target);
-        if (result !== "water") renderShip(e.target);
-        if (result === "game over") renderEndScreen();
-        playerOne.gameboard.toggleBoardState();
-        const computerTurnResult = playerTwo.playComputerTurn(
-          playerOne.gameboard.receiveAttack,
-          playerOne.gameboard.missedAttacks,
-          playerOne.gameboard.hitAttacks
-        );
-        if (!computerTurnResult.atkResult) return;
-        if (computerTurnResult === "game over") renderEndScreen();
-        const computerTargettedSquare = document.querySelector(
-          `[coords="${computerTurnResult.coords}"]`
-        );
-        renderX(computerTargettedSquare);
-        playerTwo.gameboard.toggleBoardState();
-      })
-    );
-  });
+      // playerOne's turn
+      const result = playerTwo.gameboard.receiveAttack(targettedCoords);
+      if (!result) return;
+      if (result === "water") renderWater(e.target);
+      if (result !== "water") renderShip(e.target);
+      if (result === "game over") renderEndScreen();
+      playerOne.gameboard.toggleBoardState();
+
+      // computer's turn
+      const computerTurnResult = playerTwo.playComputerTurn(
+        playerOne.gameboard.receiveAttack,
+        playerOne.gameboard.missedAttacks,
+        playerOne.gameboard.hitAttacks
+      );
+
+      if (!computerTurnResult.atkResult) return;
+      if (computerTurnResult === "game over") renderEndScreen();
+      const computerTargettedSquare = document.querySelector(
+        `[coords="${computerTurnResult.coords}"]`
+      );
+      renderX(computerTargettedSquare);
+      playerTwo.gameboard.toggleBoardState();
+    })
+  );
+  // removed board ones functionality
+  // if (e.target.parentElement.classList.contains("one")) {
+  // if the attack is invalid then the receive attack function will return false and the turns should not be toggled
+  // only if the attack is valid then toggle turns and continue game flow
+  // const result = playerOne.gameboard.receiveAttack(targettedCoords);
+  // if (!result) return;
+  // if (result === "game over") renderEndScreen();
+  // renderX(e.target);
+  // playerTwo.gameboard.toggleBoardState();
 }
 
 // listens to click event, checks if the baord is active/if it the players turn, calls receive attack function if so, and do nothing if it the board isnt supposed to be active
