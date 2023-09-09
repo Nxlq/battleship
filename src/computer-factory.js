@@ -1,3 +1,4 @@
+import { playerTwo } from ".";
 import GameboardFactory from "./gameboard-factory";
 
 const newComputer = () => {
@@ -12,9 +13,18 @@ const newComputer = () => {
     return number === 0 ? "h" : "v";
   }
 
-  function generateValidAttackCoords() {
-    let coords = [generateRandomNumber(0, 9), generateRandomNumber(0, 9)];
-    while (gameboard.missedAttacks.includes(coords.toString())) {
+  function generateValidAttackCoords(
+    enemyBoardsMissedAttacks,
+    enemyBoardsHitAttacks
+  ) {
+    let coords = [
+      generateRandomNumber(0, 9),
+      generateRandomNumber(0, 9),
+    ].toString();
+    while (
+      enemyBoardsMissedAttacks.includes(coords) ||
+      enemyBoardsHitAttacks.includes(coords)
+    ) {
       coords = [generateRandomNumber(0, 9), generateRandomNumber(0, 9)];
     }
     return coords;
@@ -55,7 +65,20 @@ const newComputer = () => {
     });
   }
 
-  return { gameboard, placeShipsRandomly };
+  function playComputerTurn(
+    enemyBoardsRecieveAttack,
+    enemyBoardsMissedAttacks,
+    enemyBoardsHitAttacks
+  ) {
+    const coords = generateValidAttackCoords(
+      enemyBoardsMissedAttacks,
+      enemyBoardsHitAttacks
+    );
+    const atkResult = enemyBoardsRecieveAttack(coords);
+    return { atkResult, coords: coords.toString() };
+  }
+
+  return { gameboard, placeShipsRandomly, playComputerTurn };
 };
 
 export default newComputer;

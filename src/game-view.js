@@ -385,22 +385,33 @@ export function addBoardCoordEventListeners() {
         const targettedCoords = e.target.attributes.coords.value;
         console.log(targettedCoords);
 
-        if (e.target.parentElement.classList.contains("one")) {
-          // if the attack is invalid then the receive attack function will return false and the turns should not be toggled
-          // only if the attack is valid then toggle turns and continue game flow
-          const result = playerOne.gameboard.receiveAttack(targettedCoords);
-          if (!result) return;
-          if (result === "game over") renderEndScreen();
-          renderX(e.target);
-          playerTwo.gameboard.toggleBoardState();
-        } else {
-          const result = playerTwo.gameboard.receiveAttack(targettedCoords);
-          if (!result) return;
-          if (result === "water") renderWater(e.target);
-          if (result !== "water") renderShip(e.target);
-          if (result === "game over") renderEndScreen();
-          playerOne.gameboard.toggleBoardState();
-        }
+        // if (e.target.parentElement.classList.contains("one")) {
+        // if the attack is invalid then the receive attack function will return false and the turns should not be toggled
+        // only if the attack is valid then toggle turns and continue game flow
+        // const result = playerOne.gameboard.receiveAttack(targettedCoords);
+        // if (!result) return;
+        // if (result === "game over") renderEndScreen();
+        // renderX(e.target);
+        // playerTwo.gameboard.toggleBoardState();
+
+        const result = playerTwo.gameboard.receiveAttack(targettedCoords);
+        if (!result) return;
+        if (result === "water") renderWater(e.target);
+        if (result !== "water") renderShip(e.target);
+        if (result === "game over") renderEndScreen();
+        playerOne.gameboard.toggleBoardState();
+        const computerTurnResult = playerTwo.playComputerTurn(
+          playerOne.gameboard.receiveAttack,
+          playerOne.gameboard.missedAttacks,
+          playerOne.gameboard.hitAttacks
+        );
+        if (!computerTurnResult.atkResult) return;
+        if (computerTurnResult === "game over") renderEndScreen();
+        const computerTargettedSquare = document.querySelector(
+          `[coords="${computerTurnResult.coords}"]`
+        );
+        renderX(computerTargettedSquare);
+        playerTwo.gameboard.toggleBoardState();
       })
     );
   });

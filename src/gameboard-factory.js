@@ -141,6 +141,7 @@ const GameboardFactory = () => {
     receiveAttack,
     getShipHitcount,
     missedAttacks,
+    hitAttacks,
     hasShipsAlive,
     toggleBoardState,
     isBoardActive,
