@@ -63,7 +63,9 @@ const GameboardFactory = () => {
     return false;
   }
 
+  // setShip function takes in an array as the coords value not a string
   const setShip = (coord, ship, direction = "h") => {
+    console.log(coord);
     // check if coordinates are valid, throw error if not
     console.log({ coord, ship, direction });
     if (!checkIfValidCoords(coord, ship, direction))
